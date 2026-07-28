@@ -475,8 +475,15 @@ extension KeyboardShortcuts {
 				showsCancelButton = true
 
 				saveShortcut(shortcut)
-				blur()
 
+				// Deliberately NOT calling `blur()` here. Upstream drops focus after a successful
+				// capture, which forces the user to click back into the field to try a different
+				// combination. Staying focused lets them keep pressing combinations until they
+				// settle on one; recording ends — and the placeholder reverts to "Record
+				// Shortcut" — when focus genuinely leaves, which is the natural signal for it.
+				//
+				// This is a UX preference, not a bug fix. Keep it separate from the three defect
+				// fixes if these are ever sent upstream.
 				return nil
 			}.start()
 
